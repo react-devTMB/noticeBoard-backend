@@ -1,6 +1,7 @@
 import app from './config/app';
 import * as dotenv from 'dotenv';
-dotenv.config({ path: __dirname + '/.env' });
+
+dotenv.config();
 
 const PORT = process.env.PORT || 3000;
 

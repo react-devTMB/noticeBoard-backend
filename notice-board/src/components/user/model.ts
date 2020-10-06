@@ -1,5 +1,5 @@
 import { NextFunction } from 'express';
-import { Document, Schema, model } from 'mongoose';
+import { Document, Schema, model, Model } from 'mongoose';
 
 export interface User extends Document {
   email: string;
@@ -10,19 +10,21 @@ export interface User extends Document {
   role_id: string;
 }
 
-const schema = new Schema({
+const UserSchema = new Schema({
   email: { type: String, required: true },
   password: { type: String, required: true },
   name: { type: String, required: true },
-  reg_date: { type: Date, required: true },
-  last_login: { type: Date, required: true },
+  reg_date: { type: Date },
+  last_login: { type: Date },
   role_id: { type: String, required: true },
 });
 
 // Pres
-// schema.pre('save', (next: NextFunction) => {
-//   console.log(1);
-//   next();
-// });
+UserSchema.pre<User>('save', function (next) {
+  if (this.isNew) {
+    this.reg_date = new Date();
+  }
+  next();
+});
 
-export const UserModel = model<User>('User', schema);
+export const UserModel = model<User>('User', UserSchema);

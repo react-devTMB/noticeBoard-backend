@@ -23,7 +23,7 @@ class App {
     this.mongoSetup();
 
     // routes
-    this.userRoutes.route(this.app);
+    this.app.use('/api/v1', this.userRoutes.getRouter());
 
     // error middleware
     this.app.use(handleErrors);
@@ -39,12 +39,16 @@ class App {
   private mongoSetup(): void {
     const mongoUri = `mongodb+srv://tmb:${this.dbPassword}@tmb.mxhut.mongodb.net/${this.dbName}?retryWrites=true&w=majority`;
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    mongoose.connect(mongoUri, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      useCreateIndex: true,
-      useFindAndModify: false,
-    });
+    mongoose.connect(
+      mongoUri,
+      {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        useCreateIndex: true,
+        useFindAndModify: false,
+      },
+      () => console.log('connected to Mongo DB')
+    );
   }
 }
 

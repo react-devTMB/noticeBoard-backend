@@ -1,13 +1,14 @@
-import { Application, Request, Response } from 'express';
+import { Request, Response, Router } from 'express';
 import UserService from '../components/user/service';
 import { HTTP_STATUS } from '../common/httpStatus';
 import { NotFound } from '../common/error';
 
 export class UserRoutes {
+  private router: Router = Router();
   private userService = new UserService();
 
-  public route(app: Application): void {
-    app.get('/api/user', async (req: Request, res: Response) => {
+  public getRouter(): Router {
+    this.router.get('/user', async (req: Request, res: Response) => {
       const users = await this.userService.find();
 
       console.log(users);
@@ -15,7 +16,7 @@ export class UserRoutes {
       res.status(HTTP_STATUS.SUCCESS).json(users);
     });
 
-    app.get('/api/user/:id', async (req: Request, res: Response) => {
+    this.router.get('/user/:id', async (req: Request, res: Response) => {
       const id: string = req.params.id;
 
       console.log(id);
@@ -29,12 +30,14 @@ export class UserRoutes {
       res.status(HTTP_STATUS.SUCCESS).json(user);
     });
 
-    app.post('/api/user', async (req: Request, res: Response) => {
-      const user = req.params;
+    this.router.post('/user', async (req: Request, res: Response) => {
+      const user = await this.userService.save(req.body);
+      res.status(HTTP_STATUS.SUCCESS).json(user);
     });
 
-    app.put('/api/user/:id', async (req: Request, res: Response) => {});
+    this.router.put('/user/:id', async (req: Request, res: Response) => {});
 
-    app.delete('/api/user/:id', async (req: Request, res: Response) => {});
+    this.router.delete('/user/:id', async (req: Request, res: Response) => {});
+    return this.router;
   }
 }
