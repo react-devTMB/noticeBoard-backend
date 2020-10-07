@@ -1,19 +1,22 @@
-import { Request, Response, Router } from 'express';
+import { NextFunction, Request, Response, Router } from 'express';
 import UserService from '../components/user/service';
 import { HTTP_STATUS } from '../common/httpStatus';
-import { NotFound } from '../common/error';
+import { NotFound, BusinessException } from '../exception';
+import logger from '../config/winston';
 
-export class UserRoutes {
+export default class UserRoutes {
   private router: Router = Router();
   private userService = new UserService();
 
   public getRouter(): Router {
-    this.router.get('/user', async (req: Request, res: Response) => {
+    this.router.get('/user', async (req: Request, res: Response, next: NextFunction) => {
       const users = await this.userService.find();
 
-      console.log(users);
+      logger.debug(JSON.stringify(users));
 
-      res.status(HTTP_STATUS.SUCCESS).json(users);
+      next(new BusinessException('test error', HTTP_STATUS.NOT_ALLOWED_METHOD));
+
+      // res.status(HTTP_STATUS.SUCCESS).json(users);
     });
 
     this.router.get('/user/:id', async (req: Request, res: Response) => {
