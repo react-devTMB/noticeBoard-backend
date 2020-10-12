@@ -1,8 +1,4 @@
-import * as dotenv from 'dotenv';
-import app from './config/app';
-import logger from './config/winston';
-
-dotenv.config();
+import app from './app';
 
 // programming error
 // process.on('unhandledRejection', (err) => {
@@ -14,9 +10,7 @@ dotenv.config();
 //   process.exit(1);
 // });
 
-const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, () => {
-  // logger.debug(`Express server listening on port ${PORT}`);
-  console.log(`Express server listening on port ${PORT}`);
+app.listen(app.get('port'), () => {
+  console.log('  App is running at http://localhost:%d in %s mode', app.get('port'), app.get('env'));
+  // console.log('  Press CTRL-C to stop\n');
 });

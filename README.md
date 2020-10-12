@@ -64,3 +64,14 @@ https://github.com/goldbergyoni/nodebestpractices
   ```txt
   - 설정 완료 후 Preferences > Settings > Workspace > Editor: Format On Save 옵션에 체크
   ```
+
+- routes
+
+  - handle HTTP logic
+
+- service
+
+  - handle business logic
+
+- model
+  - data access layer

@@ -1,5 +1,5 @@
 import { DocumentQuery, Query } from 'mongoose';
-import { User, UserModel } from './model';
+import { User, UserModel } from '../models/User';
 
 export default class UserService {
   public find(): DocumentQuery<User[], User> {

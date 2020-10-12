@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { HTTP_STATUS } from '../common/httpStatus';
 import { Exception } from '../exception';
-import logger from '../config/winston';
+import logger from '../config/logger';
 
 export default function exceptionHandler(err: Exception, req: Request, res: Response, next: NextFunction) {
   logger.error(JSON.stringify(err));

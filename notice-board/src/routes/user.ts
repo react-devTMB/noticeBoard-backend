@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response, Router } from 'express';
-import UserService from '../components/user/service';
+import UserService from '../services/user';
 import { HTTP_STATUS } from '../common/httpStatus';
 import { NotFound, BusinessException } from '../exception';
-import logger from '../config/winston';
+import logger from '../config/logger';
 
 export default class UserRoutes {
   private router: Router = Router();

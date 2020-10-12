@@ -1,17 +1,17 @@
 import express, { Application, NextFunction, Request, Response } from 'express';
-import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import UserRoutes from '../routes/user';
-import exceptionHandler from '../middleware/exceptionHandler';
-import logger from './winston';
+import UserRoutes from './routes/user';
+import exceptionHandler from './middleware/exceptionHandler';
+import logger from './config/logger';
 
 dotenv.config();
 
 class App {
   public app: Application;
-  private dbName: string = process.env.DB_NAME || '';
-  private dbPassword: string = process.env.DB_PASSWORD || '';
+
+  private port = process.env.PORT || 3000;
+  private mongoUri = process.env.MONGO_URI || '';
   private userRoutes = new UserRoutes();
 
   constructor() {
@@ -29,24 +29,23 @@ class App {
   }
 
   private config(): void {
+    this.app.set('port', this.port);
     // support application/json type post data
-    this.app.use(bodyParser.json());
+    this.app.use(express.json());
     // support application/x-www-urlencoded type post data
-    this.app.use(bodyParser.urlencoded({ extended: true }));
+    this.app.use(express.urlencoded({ extended: true }));
   }
 
   private mongoSetup(): void {
-    const mongoUri = `mongodb+srv://tmb:${this.dbPassword}@tmb.mxhut.mongodb.net/${this.dbName}?retryWrites=true&w=majority`;
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    mongoose.connect(
-      mongoUri,
+    void mongoose.connect(
+      this.mongoUri,
       {
         useNewUrlParser: true,
         useUnifiedTopology: true,
         useCreateIndex: true,
         useFindAndModify: false,
       },
-      () => logger.debug('connected to Mongo DB')
+      () => console.log('  Connected to Mongo DB')
     );
   }
 }
